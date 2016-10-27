@@ -1,0 +1,23 @@
+body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { 
+	font-family: "Helvetica Neue",Helvetica,Microsoft YaHei,Arial,sans-serif;
+}
+a {
+    color: #ffffff;
+    font-size: 14px;
+    text-decoration: none;
+    
+}
+.pull-left {
+    display: block;
+    float: left;
+}
+.pull-right {
+    display: block;
+    float: right;
+}
+.toUrl {
+	margin-top: 10px;
+}
+.brand {
+	margin-top: 70px;
+}

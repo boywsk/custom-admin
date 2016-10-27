@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- bean id="config"  
+        class="org.springframework.beans.factory.config.PropertiesFactoryBean">  
+        <property name="locations">  
+            <list>  
+				<value>classpath:/env/dev_config.properties</value>
+            </list>  
+        </property>  
+    </bean>
+    <bean id="propertyConfigurer"  
+        class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">  
+        <property name="properties" ref="config" />  
+    </bean> -->
+    <context:annotation-config/>
+    <context:component-scan base-package="com.gomeplus.im.customer.service,com.gomeplus.im.customer.dao" />  
+	
+	<context:property-placeholder location="classpath*:*.properties" />
+	
+	
+	<!-- 数据源配置, 使用DBCP数据库连接池 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <!-- Connection Info -->
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://10.125.31.220:3306/im_customer_service?useUnicode=true&amp;amp;characterEncoding=utf-8"/>
+        <property name="username" value="admin_develop"/>
+        <property name="password" value="admin6E85E1357Adev"/>
+        
+        <!-- Connection Pooling Info -->
+        <property name="maxActive" value="20"/>
+        <property name="maxIdle" value="10"/>
+        <property name="defaultAutoCommit" value="false"/>
+        <!-- 连接Idle一个小时后超时 -->
+        <property name="timeBetweenEvictionRunsMillis" value="3600000"/>
+        <property name="minEvictableIdleTimeMillis" value="3600000"/>
+    </bean>
+    <import resource="./spring-mvc.xml"/>
+    <import resource="spring-mybatis.xml"/>
+</beans>

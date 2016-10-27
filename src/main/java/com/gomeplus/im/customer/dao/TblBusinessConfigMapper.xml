@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gomeplus.im.customer.dao.TblBusinessConfigMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.gomeplus.im.customer.model.TblBusinessConfig">
+		<id column="id" property="id" />
+		<result column="appId" property="appId" />
+		<result column="businessName" property="businessName" />
+		<result column="businessType" property="businessType" />
+		<result column="businessDesc" property="businessDesc" />
+		<result column="greetings" property="greetings" />
+		<result column="seats" property="seats" />
+		<result column="visitors" property="visitors" />
+		<result column="remark" property="remark" />
+		<result column="createrId" property="createrId" />
+		<result column="createTime" property="createTime" />
+	</resultMap>
+
+	<!-- 表的列 -->
+	<sql id="columns">
+		id,
+		appId,
+		businessName,
+		businessType,
+		businessDesc,
+		greetings,
+		seats,
+		visitors,
+		remark,
+		createrId,
+		createTime
+	</sql>
+	<sql id="columnsWithoutId">
+		appId,
+		businessName,
+		businessType,
+		businessDesc,
+		greetings,
+		seats,
+		visitors,
+		remark,
+		createrId,
+		createTime
+	</sql>
+
+	<!-- 拼接查询条件 -->
+	<sql id="searchCondition">
+		1 = 1
+		<if test="appId != null and appId !=''">
+			AND appId = #{appId}
+		</if>
+		<if test="startTime != null">
+			AND createTime &gt;= #{startTime}
+		</if>
+		<if test="endTime != null">
+			AND createTime &lt;= #{endTime}
+		</if>
+		<!-- 需要什么条件自己手动加 -->
+	</sql>
+
+
+	<!-- 插入 -->
+	<insert id="insertTblBusinessConfig" keyProperty="id" useGeneratedKeys="true" parameterType="TblBusinessConfig">
+		
+		INSERT INTO tbl_business_config (
+		<include refid="columnsWithoutId" />
+		)
+		VALUES
+		(
+		#{appId},
+		#{businessName},
+		#{businessType},
+		#{businessDesc},
+		#{greetings},
+		#{seats},
+		#{visitors},
+		#{remark},
+		#{createrId},
+		#{createTime}
+		)
+		<!-- <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">  
+		SELECT LAST_INSERT_ID()
+		</selectKey> --> 
+	</insert>
+
+
+	<!-- 批量插入 -->
+	<insert id="batchInsertTblBusinessConfig" parameterType="java.util.List">
+		INSERT INTO tbl_business_config (
+		<include refid="columnsWithoutId" />
+		)
+		VALUES
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.appId},
+			#{item.businessName},
+			#{item.businessType},
+			#{item.businessDesc},
+			#{item.greetings},
+			#{item.seats},
+			#{item.visitors},
+			#{item.remark},
+			#{item.createrId},
+			#{item.createTime}
+			)
+		</foreach>
+		
+	</insert>
+
+
+	<!-- 修改 -->
+	<update id="updateTblBusinessConfig" parameterType="TblBusinessConfig">
+		UPDATE
+		tbl_business_config
+		SET
+		<if test="appId!=null">
+			appId = #{appId}
+		</if>
+		<if test="businessType!=null">
+			businessType = #{businessType},
+		</if>
+		businessName = #{businessName},
+		businessDesc = #{businessDesc},
+		greetings = #{greetings},
+		seats = #{seats},
+		visitors = #{visitors},
+		remark = #{remark}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 删除 -->
+	<delete id="deleteTblBusinessConfig" parameterType="java.lang.Long">
+		delete from
+		tbl_business_config where id=#{id}
+	</delete>
+
+	<!-- 批量删除 -->
+	<delete id="deleteBatchTblBusinessConfig" parameterType="java.lang.Long">
+		<if test="ids != null and ids.length > 0">
+			delete from tbl_business_config
+			WHERE id in
+			<foreach item="item" index="index" collection="ids" open="("
+				separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</delete>
+
+
+	<!-- 根据id查询 -->
+	<select id="getTblBusinessConfig" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="columns" />
+		FROM tbl_business_config WHERE id = #{id}
+	</select>
+
+	<!-- 根据appid查询 -->
+	<select id="getTblBusinessConfigAppId" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="columns" />
+		FROM tbl_business_config WHERE appId = #{appId}
+	</select>
+
+
+	<!-- 根据条件查询总行数 -->
+	<select id="countTblBusinessConfig" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM
+		tbl_business_config
+		WHERE
+		<include refid="searchCondition" />
+	</select>
+
+
+	<!-- 根据条件分页数据 -->
+	<select id="listTblBusinessConfig" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="columns"></include>
+		FROM
+		tbl_business_config
+		WHERE
+		<include refid="searchCondition" />
+		<!-- 自行修改排序 -->
+		ORDER BY createTime DESC
+		LIMIT #{pageIndex}, #{pageSize}
+	</select>
+
+</mapper>

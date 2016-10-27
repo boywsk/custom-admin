@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gomeplus.im.customer.dao.RoleMapper">
+
+    <resultMap type="com.gomeplus.im.customer.pojo.Role" id="role"></resultMap>
+    <resultMap type="com.gomeplus.im.customer.pojo.RolePermission" id="rolePermission"></resultMap>
+    <parameterMap type="com.gomeplus.im.customer.pojo.Role" id="p_role"></parameterMap>
+    
+	<select id="queryRoleList" resultMap="role">
+	    select * from im_customer_service.tbl_role
+	</select>
+	
+	<select id="queryRolePermission" resultMap="rolePermission" parameterType="long">
+		select * from im_customer_service.tbl_role_permission p where p.roleId = #{roleId}
+	</select>
+	
+	<delete id="deleteRolePermission" parameterType="long">
+		delete from im_customer_service.tbl_role_permission where roleId = #{roleId}
+	</delete>
+	
+	<insert id="assignPermission">
+		INSERT into im_customer_service.tbl_role_permission(roleId,permissionId) 
+    	values
+		<foreach collection="permissionIds" item="permissionId" index="index" separator=",">
+    		(#{roleId},${permissionId})
+    	</foreach>
+	</insert>
+	
+	<insert id="add" parameterMap="p_role">
+		insert into im_customer_service.tbl_role(description,roleName,roleSign)
+		values(#{description},#{roleName},#{roleSign})
+	</insert>
+	
+	<select id="getRoleByUserId" parameterType="long" resultMap="role">
+		select * from tbl_role r inner JOIN tbl_user_role ur on r.id = ur.roleId
+		where ur.userId = #{userId}
+	</select>
+	
+	<delete id="deleteById" parameterType="long">
+		delete from tbl_role where id = #{id}
+	</delete>
+	
+</mapper>

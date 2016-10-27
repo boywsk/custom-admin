@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gomeplus.im.customer.dao.PermissionMapper">
+
+    <resultMap type="com.gomeplus.im.customer.pojo.Permission" id="permission"></resultMap>
+    <parameterMap type="com.gomeplus.im.customer.pojo.Permission" id="p_permission"></parameterMap>
+    
+	<select id="queryAllPermission" resultMap="permission">
+	    select * from im_customer_service.tbl_permission
+	</select>
+	
+	<insert id="add" parameterMap="p_permission" useGeneratedKeys="true" keyProperty="id">
+		insert into im_customer_service.tbl_permission(isMenu,permissionName,permissionUrl,parent_id,level)
+		values 
+		(#{isMenu},#{permissionName},#{permissionUrl},#{parent_id},#{level})
+	</insert>
+	
+	<select id="getPermissionByRoleId" parameterType="long" resultMap="permission">
+		select * from tbl_permission p inner JOIN tbl_role_permission rp on p.id = rp.permissionId
+		where rp.roleId = #{roleId} 
+	</select>
+	
+	<select id="getAllPermission" resultMap="permission">
+		select * from tbl_permission
+	</select>
+	
+	
+</mapper>

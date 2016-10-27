@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gomeplus.im.customer.dao.MenuMapper">
+
+    <resultMap type="com.gomeplus.im.customer.model.Menu" id="menu"></resultMap>
+    
+	<select id="getMenu" resultMap="menu" parameterType="long">
+	    select * from im_customer_service.tbl_menu m where m.pid = #{userId} order by m.orderBy asc
+	</select>
+	
+</mapper>

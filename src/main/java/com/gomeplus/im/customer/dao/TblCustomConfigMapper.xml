@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gomeplus.im.customer.dao.TblCustomConfigMapper">
+	<resultMap id="BaseResultMap" type="com.gomeplus.im.customer.model.TblCustomConfig">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="configName" property="configName" jdbcType="VARCHAR" />
+		<result column="configRemark" property="configRemark" jdbcType="VARCHAR" />
+		<result column="configVal" property="configVal" jdbcType="VARCHAR" />
+		<result column="configUnit" property="configUnit" jdbcType="VARCHAR" />
+		<result column="configExt" property="configExt" jdbcType="VARCHAR" />
+		<result column="lastOperateTime" property="lastOperateTime" jdbcType="BIGINT" />
+		<result column="lastOperator" property="lastOperator" jdbcType="BIGINT" />
+		<result column="businessId" property="businessId" jdbcType="BIGINT" />
+	</resultMap>
+
+	<select id="configList" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		<![CDATA[
+			select * from im_customer_service.tbl_custom_config where businessId=#{businessId} order by id asc
+		]]>
+	</select>
+	
+	<select id="getConfigById" resultType="com.gomeplus.im.customer.model.TblCustomConfig" parameterType="java.lang.Long">
+		<![CDATA[
+			select * from im_customer_service.tbl_custom_config where id=#{id}
+		]]>
+	</select>
+
+	<insert id="saveConfig" parameterType="com.gomeplus.im.customer.model.TblCustomConfig">
+		<![CDATA[
+			insert into im_customer_service.tbl_custom_config(id,configName,configRemark,configVal,configUnit,configExt,lastOperateTime,lastOperator,businessId)
+				values 
+			(#{id},#{configName},#{configRemark},#{configVal},#{configUnit},#{configExt},#{lastOperateTime},#{lastOperator},#{businessId})
+		]]>
+		<selectKey resultType="long" keyProperty="id">
+         <![CDATA[SELECT LAST_INSERT_ID() AS ID ]]>
+     	</selectKey>
+	</insert>
+
+	<update id="updateConfigByid" parameterType="com.gomeplus.im.customer.model.TblCustomConfig">
+		update im_customer_service.tbl_custom_config set
+			configName=#{configName},
+			configRemark=#{configRemark},
+			configVal=#{configVal},
+			configUnit=#{configUnit},
+			configExt=#{configExt},
+			lastOperateTime=#{lastOperateTime},
+			lastOperator=#{lastOperator}
+		where id=#{id}
+	</update>
+	<delete id="delConfig" parameterType="map">
+		<![CDATA[
+			delete from im_customer_service.tbl_custom_config where id in (${ids})
+		]]>
+	</delete>
+
+</mapper>
